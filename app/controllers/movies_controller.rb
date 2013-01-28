@@ -7,16 +7,19 @@ class MoviesController < ApplicationController
   end
 
   def index
-      @all_ratings = 
       @sort = params[:sort]
-      if @sort
-        @movies = Movie.order(@sort).all
-        instance_variable_set("@#{@sort}_header", "hilite")
-
-      else  
+      @ratings = params[:ratings]
+      if @ratings 
+        @movies = Movie.where({:rating => @ratings.keys}).all
+      elsif  
         @movies = Movie.all
+      end    
+      if @sort
+        @movies = @movies.order(@sort).all
+        instance_variable_set("@#{@sort}_header", "hilite")
       end  
       @all_ratings = Movie.all_ratings
+      logger.debug "teste"
   end
 
   def new
